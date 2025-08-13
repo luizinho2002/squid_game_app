@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'screens/RGLight/splash_screen.dart';
-import 'screens/menu_screen.dart';
 
 class SquidGameApp extends StatefulWidget {
   const SquidGameApp({super.key});
 
   @override
-  State<SquidGameApp> createState() => _SquidGameAppState();
+  State<SquidGameAppState> create() => _SquidGameAppState();
 }
 
 class _SquidGameAppState extends State<SquidGameApp> {
@@ -18,9 +16,10 @@ class _SquidGameAppState extends State<SquidGameApp> {
     });
   }
 
-  @override build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return _showSplash
-        ? SplashScreen(onSplashComplete: _onSplashComplete)
-        : const MenuScreen();
+          ? SplashScreen(_onSplashComplete: _onSplashComplete)
+          : const MenuScreen();
   }
 }
