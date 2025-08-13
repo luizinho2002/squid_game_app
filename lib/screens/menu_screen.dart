@@ -56,7 +56,7 @@ class MenuScreen extends StatelessWidget {
                   letterSpacing: 1.0,
                   shadows: [
                     Shadow(
-                      offset: Offset(2, 2),
+                      offset: Offset(2, 3),
                       blurRadius: 4,
                       color: Colors.black54,
                     ),
@@ -64,11 +64,11 @@ class MenuScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 60),
-              _buildGameButton(
+              _buildGameButtoon(
                 context,
                 title: 'RED LIGHT\nGREEN LIGHT',
                 subtitle:
-                    'Move when green, stop when red!\nReach the finish line to survive.',
+                    'Move when green, stop when red!\nReach the finish line to survive,',
                 color: Colors.green,
                 onTap: () {
                   Navigator.push(
@@ -80,11 +80,11 @@ class MenuScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 30),
-              _buildGameButton(
+              _buildGameButtoon(
                 context,
                 title: 'JUMP ROPE\nCHALLENGE',
                 subtitle:
-                    'Jump over the rope to survive!\nReach the top platform to escape',
+                    'Jump over the rope to survive!\nReach the top plataform to escape.',
                 color: Colors.red,
                 onTap: () {
                   Navigator.push(
