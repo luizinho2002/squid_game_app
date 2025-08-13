@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:squid_game_flutter/squid_game_app.dart';
+import 'squid_game_app.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Squid Game',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFFD62598)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFD62598)),
         useMaterial3: true,
       ),
       home: const SquidGameApp(),
