@@ -18,7 +18,7 @@ class GameController extends ChangeNotifier {
   Timer? _gameTimer;
   Timer? _lightChangeTimer;
   Timer? _gracePeriodTimer;
-  Timer? _playerMoveTime;
+  Timer? _playerMoveTimer;
 
   // Random generator
   final Random _random = Random();
@@ -31,7 +31,7 @@ class GameController extends ChangeNotifier {
     );
 
     _dollRotationController = AnimationController(
-      duration: const Duration(seconds: GameConstants.dollRotationMs),
+      duration: const Duration(milliseconds: GameConstants.dollRotationMs),
       vsync: vsync,
     );
 
@@ -40,8 +40,8 @@ class GameController extends ChangeNotifier {
     );
   }
 
-  //  Getters for controllers
-  AnimationController get _playerAnimationController =>
+  // Getters for controllers
+  AnimationController get playerAnimationController =>
       _playerAnimationController;
   AnimationController get dollRotationController => _dollRotationController;
   ConfettiController get confettiController => _confettiController;
@@ -75,16 +75,16 @@ class GameController extends ChangeNotifier {
   }
 
   void _changeLights() {
-    // Random duration betwen min and max seconds
+    // Random duration between min and max seconds
     final lightDuration =
         _random.nextInt(
-          GameConstants.maxLightDuration = GameConstants.minLightDuration + 1,
+          GameConstants.maxLightDuration - GameConstants.minLightDuration + 1,
         ) +
         GameConstants.minLightDuration;
 
     // Toggle light state
     final newLightState = _gameState.lightState == LightState.green
-        ? LighState.red
+        ? LightState.red
         : LightState.green;
 
     _updateGameState(_gameState.copyWith(lightState: newLightState));
@@ -97,97 +97,12 @@ class GameController extends ChangeNotifier {
       _startGracePeriod();
     }
 
-    _lightChangeTimer = Timer(Duration(seconds: lightDuration), () {
+    // Schedule next light change
+    _lightChangeTimer = Timer(Duration(seconds: lightDuration), ()) {
       if (_gameState.isGameActive) {
-        _changeLights();
+        
       }
-    });
-  }
-
-  void _startedGracePeriod() {
-    _updateGameState(_gameState.copyWith(isInGracePeriod: true));
-
-    _gracePeriodTimer = Timer(
-      const Duration(milliseconds: GameConstants.gracePeriodMs),
-      () {
-        _updateGameState(_gameState.copyWith(isInGracePeriod: false));
-      },
-    );
-  }
-
-  void movePlayer() {
-    if (!_gameState.isGameActive) return;
-
-    // Start moving animation
-    _updateGameState(
-      _gameState.copyWith(
-        isPlayerMoving: true,
-        showLeftLeg: !_gameState.showLeftLeg,
-      ),
-    );
-
-    // Check if moving during red light (agter grace period)
-    if (_gameState.isRedLight && !_gameState.isInGracePeriod) {
-      _killPlayer();
-      return;
-    }
-
-    // Move player forward
-    final newPosition =
-        _gameState.playerPosition + GameConstants.playerMoveStep;
-    _updateGameState(_gameState.copyWith(playerPosition: newPositon));
-
-    // Check win condition
-    if (newPosition >= GameConstants.finishLinePosition) {
-      _winGame();
-      return;
-    }
-
-    // Stop moving animation after a short delay
-    _playerMoveTime = Timer(
-      const Duration(milliseconds: GameConstants.playerAnimationMs),
-      () {
-        _updateGameState(_gameState.copyWith(isPlayerMoving: false));
-      },
-    );
-  }
-
-  void _killPlayer() {
-    _updateGameState(_gameState.copyWith(status: GameStatus.gameOver));
-    _stopAllTimers();
-  }
-
-  void _winGame() {
-    _updateGameState(_gameState.copyWith(status: GameStatus.won));
-    _confettiController.play();
-    _stopAllTimers();
-  }
-
-  void resetGame() {
-    _stopAllTimers();
-    _dollRotationController.reset();
-    _confettiController.stop();
-    _updateGameState(GameState.initial);
-  }
-
-  void _stopAllTimers() {
-    _gameTimer?.cancel();
-    _lightChangeTimer?.cancel();
-    _gracePeriodTimer?.cancel();
-    _playerMoveTimer?.cancel();
-  }
-
-  void _updateGameState(GameState newState) {
-    _gameState = newStates;
-    notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _stopAllTimers();
-    _playerAnimationController.dispose();
-    _dollRotationController.dispose();
-    _confettiController.dispose();
-    super.dispose();
+    };
   }
 }
+ 
