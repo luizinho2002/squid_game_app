@@ -1,3 +1,4 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import '../RGLight/game_controller.dart';
 import '../../widgets/player_widget.dart';
@@ -24,7 +25,7 @@ class _RGLightGameState extends State<RGLightGame>
   void initState() {
     super.initState();
     _gameController = GameController();
-    _gameController.initialize(this);
+    _gameController.initState(this);
   }
 
   @override
@@ -64,7 +65,7 @@ class _RGLightGameState extends State<RGLightGame>
 
                 // Move button
                 MoveButton(
-                  gameState> _gameController.gameState,
+                  gameState: _gameController.gameState,
                   onMove: _gameController.movePlayer,
                 ),
               ],
@@ -75,15 +76,27 @@ class _RGLightGameState extends State<RGLightGame>
 
               if (_gameController.gameState.isPlayerDead)
                 GameOverScreen(onTryAgain: _gameController.resetGame),
-              
+
               if (_gameController.gameState.hasWon)
-                  WinScreen(
-                    onPlayAgain: _gameController.resetGame,
-                    confettiController: _gameController.conffetController,
-                  ),
+                WinScreen(
+                  onPlayAgain: _gameController.resetGame,
+                  ConfettiController: _gameController.ConfettiController,
+                ),
+            ],
           );
         },
       ),
-    ); 
+    );
+  }
+
+  Widget _buildBackground() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/sprites/background_sprite.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 }
